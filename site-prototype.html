@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>La Pizzanesa — Site Prototype · Design Skins</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:112px}
+
+/* ══ TOKENS — SKIN: MARCA (default) ══ */
+:root{
+  --bg:#0d0d0d;--bg2:#111;--surface:#181818;
+  --border:rgba(245,230,200,.12);--border-h:rgba(192,57,43,.45);
+  --text:#f5e6c8;--muted:rgba(245,230,200,.55);
+  --accent:#c0392b;--gold:#d4a017;
+  --r:14px;--r-sm:8px;
+  --font:system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  --hfont:var(--font);--nav-bg:rgba(13,13,13,.96);
+  --shadow:0 2px 12px rgba(0,0,0,.4);--shadow-h:0 8px 28px rgba(0,0,0,.7);
+}
+
+/* ══ SKIN: RETRO 80s ══ */
+body.retro{
+  --bg:#030010;--bg2:#060020;--surface:#080028;
+  --border:#6600ee;--border-h:#ff006e;
+  --text:#e0d0ff;--muted:rgba(224,208,255,.5);
+  --accent:#ff006e;--gold:#ffbe0b;
+  --r:2px;--r-sm:2px;
+  --font:'Courier New','Lucida Console',monospace;--hfont:'Courier New',monospace;
+  --nav-bg:rgba(3,0,16,.97);
+  --shadow:0 0 10px rgba(102,0,238,.35);--shadow-h:0 0 24px rgba(255,0,110,.75);
+}
+body.retro h2,body.retro h3,body.retro h1{letter-spacing:2px;text-transform:uppercase}
+body.retro h1{text-shadow:0 0 12px var(--accent),0 0 30px var(--accent)}
+body.retro h2{text-shadow:0 0 8px #6600ee,0 0 18px #6600ee}
+body.retro .card{border:1px solid #6600ee;position:relative;overflow:hidden}
+body.retro .card::after{content:'';position:absolute;inset:0;pointer-events:none;z-index:2;background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,0,0,.1) 3px,rgba(0,0,0,.1) 4px)}
+body.retro .card:hover{border-color:#ff006e;box-shadow:0 0 20px rgba(255,0,110,.6)}
+body.retro .price{color:#00ff41!important;text-shadow:0 0 8px #00ff41}
+body.retro .pedir-btn{color:#ffbe0b!important}
+body.retro .btn-primary{background:#ff006e!important;border:1px solid #ff006e}
+body.retro .btn-secondary{border-color:#6600ee!important}
+
+/* ══ SKIN: KIDS ══ */
+body.kids{
+  --bg:#fff9ec;--bg2:#fff3d6;--surface:#fff;
+  --border:rgba(255,107,0,.18);--border-h:#ff6b00;
+  --text:#1a1200;--muted:rgba(26,18,0,.55);
+  --accent:#ff6b00;--gold:#f4a200;
+  --r:20px;--r-sm:12px;
+  --font:'Comic Sans MS','Chalkboard SE',cursive;--hfont:var(--font);
+  --nav-bg:rgba(255,249,236,.96);
+  --shadow:0 2px 10px rgba(255,107,0,.15);--shadow-h:0 6px 24px rgba(255,107,0,.35);
+}
+body.kids .hero{background:linear-gradient(135deg,#ff6b00 0%,#ff9500 50%,#ffc800 100%)!important;min-height:380px}
+body.kids .hero-bg,body.kids .hero-overlay{display:none}
+body.kids .hero-h1{color:#1a1200!important}
+body.kids .hero-sub{color:rgba(26,18,0,.7)!important}
+body.kids .hero-eyebrow{color:#1a1200!important}
+body.kids .btn-secondary{border-color:rgba(26,18,0,.3)!important;color:#1a1200!important}
+body.kids .trust-item{background:#fff3d6;border-color:rgba(255,107,0,.2)}
+body.kids .promo-badge{background:#ff6b00}
+body.kids .combo-cta{background:#ff6b00}
+body.kids .cat-nav-link.active,.cat-nav-link:hover{background:#ff6b00!important;color:#fff!important}
+body.kids .nav-cta{background:#ff6b00}
+
+/* ══ BASE ══ */
+body{background:var(--bg);color:var(--text);font-family:var(--font);line-height:1.5;-webkit-font-smoothing:antialiased}
+h1,h2,h3,h4{font-family:var(--hfont);line-height:1.1}
+a{color:inherit;text-decoration:none}
+img{display:block;max-width:100%}
+button{font-family:var(--font);cursor:pointer;border:none;outline:none}
+
+/* ══ TOOLBAR ══ */
+.toolbar{position:fixed;bottom:16px;right:16px;z-index:200;display:flex;flex-direction:column;align-items:flex-end;gap:8px}
+.skin-buttons{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.skin-btn{padding:6px 14px;border-radius:999px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:12px;font-weight:600;cursor:pointer;transition:all .15s}
+.skin-btn.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+.cloud-wrap{display:flex;align-items:center;gap:6px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r-sm);padding:6px 10px}
+.cloud-wrap label{font-size:11px;font-weight:600;color:var(--muted);white-space:nowrap}
+.cloud-in{background:transparent;border:none;outline:none;color:var(--text);font-size:12px;width:150px;font-family:monospace}
+
+/* ══ MAIN NAV ══ */
+.main-nav{position:sticky;top:0;z-index:100;background:var(--nav-bg);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);height:56px;display:flex;align-items:center;padding:0 20px;gap:0}
+.nav-logo{font-size:17px;font-weight:800;color:var(--text);margin-right:auto;white-space:nowrap}
+.nav-logo em{color:var(--accent);font-style:normal}
+.nav-links{display:flex;align-items:center;gap:4px}
+.nav-a{padding:6px 12px;border-radius:6px;font-size:14px;font-weight:500;color:var(--muted);transition:all .15s;white-space:nowrap}
+.nav-a:hover{color:var(--text);background:rgba(255,255,255,.06)}
+.nav-cta{margin-left:8px;padding:8px 18px;border-radius:999px;background:var(--accent);color:#fff;font-size:13px;font-weight:700;transition:opacity .15s;white-space:nowrap}
+.nav-cta:hover{opacity:.88}
+
+/* ══ HERO ══ */
+.hero{position:relative;overflow:hidden;background:var(--bg);min-height:500px;display:flex;align-items:center}
+.hero-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center right;opacity:.38}
+.hero-overlay{position:absolute;inset:0;background:linear-gradient(90deg,var(--bg) 38%,rgba(13,13,13,.7) 65%,transparent)}
+.hero-content{position:relative;z-index:1;max-width:960px;margin:0 auto;width:100%;padding:72px 20px}
+.hero-eyebrow{font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-bottom:14px}
+.hero-h1{font-size:clamp(2rem,6vw,4.5rem);font-weight:900;color:var(--text);margin-bottom:16px;max-width:620px}
+.hero-sub{font-size:clamp(.95rem,2.5vw,1.15rem);color:var(--muted);margin-bottom:28px;max-width:480px;line-height:1.65}
+.hero-ctas{display:flex;flex-wrap:wrap;gap:12px}
+.btn-primary{padding:13px 28px;border-radius:999px;background:var(--accent);color:#fff;font-weight:700;font-size:15px;transition:opacity .15s;display:inline-block}
+.btn-primary:hover{opacity:.88}
+.btn-secondary{padding:12px 28px;border-radius:999px;border:1px solid rgba(245,230,200,.25);color:var(--text);font-weight:600;font-size:15px;transition:all .15s;display:inline-block}
+.btn-secondary:hover{border-color:var(--accent);color:var(--accent)}
+
+/* ══ TRUST BAR ══ */
+.trust-bar{background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:16px 20px}
+.trust-list{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;max-width:960px;margin:0 auto}
+.trust-item{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-sm);padding:9px 16px;font-size:13px;font-weight:600;white-space:nowrap}
+
+/* ══ SECTION WRAPPER ══ */
+.section{padding:60px 20px;max-width:960px;margin:0 auto}
+.section-h2{font-size:clamp(1.8rem,4vw,2.6rem);color:var(--accent);margin-bottom:8px}
+.section-sub{font-size:13px;color:var(--muted);margin-bottom:28px}
+
+/* ══ PROMOS ══ */
+.promos-bg{background:var(--bg);border-bottom:1px solid var(--border)}
+.promos-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:540px){.promos-grid{grid-template-columns:1fr}}
+.promo-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:24px;position:relative;overflow:hidden;transition:border-color .15s}
+.promo-card:hover{border-color:var(--border-h)}
+.promo-day{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.12em;color:var(--accent);margin-bottom:6px}
+.promo-title{font-size:20px;font-weight:800;margin-bottom:8px}
+.promo-body{font-size:13px;color:var(--muted);line-height:1.55;margin-bottom:18px}
+.promo-price{font-size:28px;font-weight:900;color:var(--gold)}
+.promo-price small{font-size:13px;color:var(--muted);font-weight:400;margin-left:4px}
+.promo-badge{position:absolute;top:14px;right:14px;background:var(--accent);color:#fff;font-size:10px;font-weight:800;padding:4px 10px;border-radius:999px;text-transform:uppercase;letter-spacing:.07em}
+
+/* ══ COMBOS ══ */
+.combos-row{display:flex;gap:14px;overflow-x:auto;padding-bottom:10px;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch}
+.combo-card{flex:0 0 260px;scroll-snap-align:start;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:22px;display:flex;flex-direction:column;transition:border-color .15s,box-shadow .15s}
+.combo-card:hover{border-color:var(--border-h);box-shadow:var(--shadow-h)}
+.combo-tag{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);margin-bottom:6px}
+.combo-name{font-size:19px;font-weight:800;margin-bottom:10px}
+.combo-includes{font-size:13px;color:var(--muted);line-height:1.55;flex:1;margin-bottom:14px}
+.combo-price{font-size:26px;font-weight:900;margin-bottom:4px}
+.combo-saving{font-size:11px;color:var(--gold);font-weight:600;margin-bottom:16px}
+.combo-cta{display:block;text-align:center;padding:11px;border-radius:999px;background:var(--accent);color:#fff;font-weight:700;font-size:14px;transition:opacity .15s}
+.combo-cta:hover{opacity:.88}
+
+/* ══ TV GRID ══ */
+.tv-bg{background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.tv-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+@media(min-width:620px){.tv-grid{grid-template-columns:repeat(3,1fr)}}
+
+/* ══ REVIEWS ══ */
+.reviews-bg{background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.reviews-meta{display:flex;align-items:center;gap:8px;margin-bottom:20px;font-size:14px;font-weight:700;color:var(--gold)}
+.reviews-row{display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:10px;-webkit-overflow-scrolling:touch}
+.review-card{flex:0 0 260px;scroll-snap-align:start;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:18px;display:flex;flex-direction:column}
+.review-stars{color:var(--gold);font-size:13px;margin-bottom:10px}
+.review-quote{font-size:13px;line-height:1.6;color:var(--muted);flex:1;margin-bottom:14px}
+.review-author{display:flex;align-items:center;gap:10px}
+.review-photo{width:34px;height:34px;border-radius:50%;object-fit:cover;flex-shrink:0}
+.review-name{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted)}
+
+/* ══ HISTORIA ══ */
+.historia-text{font-size:1.05rem;line-height:1.75;color:var(--muted);max-width:640px;margin-bottom:16px}
+
+/* ══ CARTA DIVIDER ══ */
+.carta-div{background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border);text-align:center;padding:48px 20px}
+.carta-div-title{font-size:clamp(2.2rem,6vw,4rem);font-weight:900;margin-bottom:8px}
+.carta-div-sub{font-size:14px;color:var(--muted)}
+
+/* ══ CARTA CAT NAV ══ */
+.cat-nav{position:sticky;top:56px;z-index:90;background:var(--nav-bg);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:0 16px;height:48px;display:flex;align-items:center;gap:4px;overflow-x:auto}
+.cat-nav::-webkit-scrollbar{display:none}
+.cat-a{padding:6px 16px;border-radius:999px;font-size:13px;font-weight:600;color:var(--muted);white-space:nowrap;transition:all .15s;flex-shrink:0}
+.cat-a:hover,.cat-a.active{background:var(--accent);color:#fff}
+
+/* ══ CAROUSEL SECTION ══ */
+.cat-section{scroll-margin-top:112px;padding:40px 0;border-bottom:1px solid var(--border)}
+.cat-inner{max-width:960px;margin:0 auto;padding:0 20px}
+.cat-h2{font-size:clamp(1.5rem,3.5vw,2.1rem);color:var(--accent);margin-bottom:4px}
+.cat-sub{font-size:13px;color:var(--muted);margin-bottom:22px}
+.carousel{display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:12px;-webkit-overflow-scrolling:touch}
+.carousel::-webkit-scrollbar{height:4px}
+.carousel::-webkit-scrollbar-track{background:var(--surface);border-radius:2px}
+.carousel::-webkit-scrollbar-thumb{background:rgba(192,57,43,.4);border-radius:2px}
+
+/* ══ PRODUCT CARD ══ */
+.card{flex:0 0 196px;scroll-snap-align:start;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;display:flex;flex-direction:column;transition:border-color .15s,box-shadow .15s;box-shadow:var(--shadow)}
+.card:hover{border-color:var(--border-h);box-shadow:var(--shadow-h)}
+.card-img-wrap{position:relative;width:100%;aspect-ratio:4/3;background:var(--bg2);overflow:hidden;flex-shrink:0}
+.card-img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .3s}
+.card:hover .card-img{transform:scale(1.05)}
+.card-ph{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:28px;opacity:.25;background:linear-gradient(135deg,rgba(192,57,43,.12),rgba(192,57,43,.03))}
+.card-body{padding:12px;display:flex;flex-direction:column;flex:1}
+.card-cat{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:3px}
+.card-name{font-size:13px;font-weight:700;line-height:1.3;margin-bottom:4px}
+.card-desc{font-size:11px;color:var(--muted);line-height:1.4;flex:1;margin-bottom:8px;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.card-footer{display:flex;align-items:center;justify-content:space-between;margin-top:auto;padding-top:8px;border-top:1px solid var(--border)}
+.price{font-size:14px;font-weight:800;color:var(--accent)}
+.pedir-btn{font-size:12px;font-weight:700;color:var(--accent)}
+.pedir-btn:hover{text-decoration:underline}
+.badge-top{position:absolute;top:8px;left:8px;background:var(--accent);color:#fff;font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.07em;padding:3px 9px;border-radius:999px}
+.badge-agotado{position:absolute;top:8px;left:8px;background:rgba(0,0,0,.72);color:rgba(245,230,200,.6);font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.07em;padding:3px 9px;border-radius:999px;border:1px solid rgba(245,230,200,.15)}
+
+/* ══ FOOTER ══ */
+footer{background:var(--bg2);border-top:1px solid var(--border);padding:48px 20px 32px}
+.footer-grid{max-width:960px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:32px}
+@media(max-width:540px){.footer-grid{grid-template-columns:1fr}}
+.footer-logo{font-size:20px;font-weight:800;margin-bottom:10px}
+.footer-logo em{color:var(--accent);font-style:normal}
+.footer-nap{font-size:13px;color:var(--muted);line-height:1.75}
+.footer-col h4{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);margin-bottom:10px}
+.footer-col ul{list-style:none;display:flex;flex-direction:column;gap:6px;margin-bottom:20px}
+.footer-col a{font-size:13px;color:var(--muted);transition:color .15s}
+.footer-col a:hover{color:var(--text)}
+.footer-legal{max-width:960px;margin:24px auto 0;padding-top:16px;border-top:1px solid var(--border);font-size:11px;color:var(--muted);display:flex;flex-wrap:wrap;gap:8px;justify-content:space-between}
+
+/* ══ UTIL ══ */
+.swipe{font-size:11px;color:var(--muted);margin-top:8px}
+@media(min-width:640px){.swipe{display:none}}
+</style>
+</head>
+<body>
+
+<!-- ═══ TOOLBAR ═══ -->
+<div class="toolbar">
+  <div class="skin-buttons">
+    <button class="skin-btn active" onclick="setSkin('')">Marca</button>
+    <button class="skin-btn" onclick="setSkin('retro')">Retro 80s</button>
+    <button class="skin-btn" onclick="setSkin('kids')">Kids</button>
+  </div>
+  <div class="cloud-wrap">
+    <label for="cloudIn">☁ cloud:</label>
+    <input id="cloudIn" class="cloud-in" type="text" placeholder="tu-cloud-name" oninput="setCloud(this.value)">
+  </div>
+</div>
+
+<!-- ═══ MAIN NAV ═══ -->
+<nav class="main-nav">
+  <span class="nav-logo">La <em>Pizzanesa</em></span>
+  <div class="nav-links">
+    <a href="#home" class="nav-a">Inicio</a>
+    <a href="#top-ventas" class="nav-a">Top</a>
+    <a href="#carta" class="nav-a">Carta</a>
+    <a href="https://lapizzanesa.last.shop" target="_blank" rel="noopener" class="nav-cta">Pedir ahora</a>
+  </div>
+</nav>
+
+<!-- ═══ HERO ═══ -->
+<section id="home" class="hero">
+  <img class="hero-bg" src="/photos/carnivora.webp" alt="" aria-hidden="true">
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <p class="hero-eyebrow">Alcobendas · Pizzas &amp; Milanesas artesanas</p>
+    <h1 class="hero-h1">Milanesas gigantes.<br>Masa 72h.<br>Pide en 2 clics.</h1>
+    <p class="hero-sub">Pizza artesana de Alcobendas, hecha con mimo cada día. Sin plataformas de por medio — directamente de nuestro horno a tu mesa.</p>
+    <div class="hero-ctas">
+      <a href="https://lapizzanesa.last.shop" target="_blank" rel="noopener" class="btn-primary">Pedir ahora</a>
+      <a href="#carta" class="btn-secondary">Ver la carta</a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ TRUST BAR ═══ -->
+<div class="trust-bar">
+  <ul class="trust-list" role="list">
+    <li class="trust-item">🫓 Masa 72h</li>
+    <li class="trust-item">📏 Mediana 33 cm</li>
+    <li class="trust-item">📍 Alcobendas · Tu barrio</li>
+    <li class="trust-item">✅ Garantía Operativa</li>
+    <li class="trust-item">🤌 Artesanal cada día</li>
+  </ul>
+</div>
+
+<!-- ═══ PROMOS ═══ -->
+<div class="promos-bg">
+  <div class="section">
+    <h2 class="section-h2">Ofertas semanales</h2>
+    <p class="section-sub">Solo a recoger en el local. Válido el día indicado.</p>
+    <div class="promos-grid">
+      <div class="promo-card">
+        <div class="promo-day">Lunes</div>
+        <h3 class="promo-title">Lunes Cañeros</h3>
+        <p class="promo-body">Pizzas medianas de 33 cm desde 9,95 €. Arranca la semana sin excusas.</p>
+        <div class="promo-price">9,95 € <small>/ pizza mediana</small></div>
+        <div class="promo-badge">Pickup only</div>
+      </div>
+      <div class="promo-card">
+        <div class="promo-day">Miércoles</div>
+        <h3 class="promo-title">Miércoles Creativos</h3>
+        <p class="promo-body">2 pizzas medianas de 33 cm de 2 ingredientes desde 9,95 € cada una. Móntate las tuyas.</p>
+        <div class="promo-price">9,95 € <small>/ pizza</small></div>
+        <div class="promo-badge">Pickup only</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ COMBOS ═══ -->
+<div class="section" style="padding-top:48px">
+  <h2 class="section-h2">Menús y combos</h2>
+  <p class="section-sub">Decisión fácil. Precio claro. Sin sustos.</p>
+  <div class="combos-row">
+    <div class="combo-card">
+      <div class="combo-tag">Tu partida, tus reglas</div>
+      <div class="combo-name">Menú Solo</div>
+      <p class="combo-includes">1 Pizza + 1 Bebida o postre. Tú mandas, sin dar explicaciones a nadie.</p>
+      <div class="combo-price">19,95 €</div>
+      <div class="combo-saving">Ahorra 5% en combo personal</div>
+      <a href="https://lapizzanesa.last.shop/es/product/f0ea15d3-80cb-449a-b60b-60871dcfd08b/men-solo-tu-partida-tus-reglas" target="_blank" rel="noopener" class="combo-cta">Pedir combo →</a>
+    </div>
+    <div class="combo-card">
+      <div class="combo-tag">Misión en equipo</div>
+      <div class="combo-name">Menú Familiar</div>
+      <p class="combo-includes">2 Entrantes + 2 Pizzas Medianas + 2 Bebidas 1L. Cena para la tropa, sin peleas por el mando.</p>
+      <div class="combo-price">59,95 €</div>
+      <div class="combo-saving">Ahorra 8% en combo familiar</div>
+      <a href="https://lapizzanesa.last.shop/es/product/f315f1f5-073e-4372-a7f8-10de6b3615da/men-familiar-misin-en-equipo" target="_blank" rel="noopener" class="combo-cta">Pedir combo →</a>
+    </div>
+  </div>
+  <p class="swipe">← desliza →</p>
+</div>
+
+<!-- ═══ TOP VENTAS ═══ -->
+<div id="top-ventas" class="tv-bg">
+  <div class="section">
+    <h2 class="section-h2">Lo que más se pide</h2>
+    <p class="section-sub">Dos años. Miles de pedidos. Esto es lo que no para de salir de nuestra cocina.</p>
+    <div class="tv-grid" id="tv-grid"></div>
+  </div>
+</div>
+
+<!-- ═══ REVIEWS ═══ -->
+<div id="reviews" class="reviews-bg">
+  <div class="section">
+    <h2 class="section-h2">Lo que dicen nuestros clientes</h2>
+    <div class="reviews-meta">
+      <span aria-hidden>★★★★★</span>
+      <span>4,8 · 314 reseñas en Google</span>
+    </div>
+    <div class="reviews-row" id="reviews-row"></div>
+    <p class="swipe">← desliza →</p>
+  </div>
+</div>
+
+<!-- ═══ HISTORIA ═══ -->
+<div id="historia" class="section">
+  <h2 class="section-h2">Nuestra historia</h2>
+  <p class="historia-text">La Pizzanesa nació en Alcobendas con una idea simple: milanesas gigantes estilo argentino y pizzas de verdad, artesanas, hechas con mimo cada día. Sin atajos.</p>
+  <p class="historia-text">El barrio le puso nombre a las pizzas. Los Parroquiers, el grupo de WhatsApp, los pedidos de oficina en grupo: La Pizzanesa es el tercer lugar del barrio, en digital. No un local bonito — una comunidad que comparte pizza.</p>
+</div>
+
+<!-- ═══ CARTA DIVIDER ═══ -->
+<div id="carta" class="carta-div">
+  <h2 class="carta-div-title">La Carta</h2>
+  <p class="carta-div-sub">28 pizzas · 13 milanesas · 11 entrantes · postres</p>
+</div>
+
+<!-- ═══ CAT NAV ═══ -->
+<nav class="cat-nav" id="cat-nav" aria-label="Categorías">
+  <a href="#entrantes" class="cat-a">Entrantes</a>
+  <a href="#milanesas" class="cat-a">Milanesas</a>
+  <a href="#pizzas" class="cat-a">Pizzas</a>
+  <a href="#postres" class="cat-a">Postres</a>
+</nav>
+
+<!-- ENTRANTES -->
+<section id="entrantes" class="cat-section">
+  <div class="cat-inner">
+    <h2 class="cat-h2">Entrantes</h2>
+    <p class="cat-sub">Para compartir, para picotear, para entrar en calor.</p>
+    <div class="carousel" id="car-entrantes"></div>
+    <p class="swipe">← desliza →</p>
+  </div>
+</section>
+
+<!-- MILANESAS -->
+<section id="milanesas" class="cat-section">
+  <div class="cat-inner">
+    <h2 class="cat-h2">Milanesas</h2>
+    <p class="cat-sub">El producto estrella. Gigantes, artesanas, estilo argentino. Todas 33 cm.</p>
+    <div class="carousel" id="car-milanesas"></div>
+    <p class="swipe">← desliza →</p>
+  </div>
+</section>
+
+<!-- PIZZAS -->
+<section id="pizzas" class="cat-section">
+  <div class="cat-inner">
+    <h2 class="cat-h2">Pizzas</h2>
+    <p class="cat-sub">Medianas 33 cm. Masa 72h. Todas a precio honesto. Upsell de masa disponible.</p>
+    <div class="carousel" id="car-pizzas"></div>
+    <p class="swipe">← desliza →</p>
+  </div>
+</section>
+
+<!-- POSTRES -->
+<section id="postres" class="cat-section">
+  <div class="cat-inner">
+    <h2 class="cat-h2">Postres</h2>
+    <p class="cat-sub">El cierre perfecto. Disponibilidad según temporada.</p>
+    <div class="carousel" id="car-postres"></div>
+    <p class="swipe">← desliza →</p>
+  </div>
+</section>
+
+<!-- ═══ FOOTER ═══ -->
+<footer>
+  <div class="footer-grid">
+    <div>
+      <div class="footer-logo">La <em>Pizzanesa</em></div>
+      <address class="footer-nap" style="font-style:normal">
+        Calle de la Constitución 104, local 12 y 13<br>
+        28100 Alcobendas, Madrid<br>
+        <a href="tel:+34910689365">910 689 365</a><br><br>
+        <strong>Horario:</strong><br>
+        Lun–Mié: 19:30–23:00 h<br>
+        Jue: CERRADO<br>
+        Vie–Dom: 13:30–16:00 h · 19:30–00:00 h
+      </address>
+    </div>
+    <div class="footer-col">
+      <h4>Pedir</h4>
+      <ul>
+        <li><a href="https://lapizzanesa.last.shop" target="_blank" rel="noopener">Tienda Online</a></li>
+        <li><a href="https://wa.me/34613201830" target="_blank" rel="noopener">WhatsApp</a></li>
+      </ul>
+      <h4>Redes</h4>
+      <ul>
+        <li><a href="https://www.instagram.com/lapizzanesa.pizza" target="_blank" rel="noopener">Instagram</a></li>
+        <li><a href="https://www.facebook.com/lapizzanesa.pizza/" target="_blank" rel="noopener">Facebook</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-legal">
+    <span>© 2026 La Pizzanesa · Maria Navas Pastor · NIF 53360154Q</span>
+    <span style="font-style:italic">Powered by The Secret Studio</span>
+  </div>
+</footer>
+
+<script>
+// ════════════════════════════════════════════════════════
+// DATA — source of truth from lapizzanesa.ts + carta.json
+// ════════════════════════════════════════════════════════
+
+const LOCAL_PHOTOS = {
+  'pizza-constitucion-de-la-casa': '/photos/constitucion.webp',
+  'pizza-mexicana': '/photos/mexicana.webp',
+  'pizza-pollo-bbq': '/photos/pollo-bbq.webp',
+};
+
+const TOP_VENTAS = [
+  { slug:'milanesa-cheddar-bacon', name:'Milanesa Cheddar & Bacon', tagline:'La que más se pide. Siempre.', cat:'Milanesa', cid:'uyu2b9xe8tepni4oesvw', priceCents:2395, url:'https://lapizzanesa.last.shop/es/product/52d2d50e-2c38-49b2-ac4c-dbdb9e73d0cf', badge:'Nº1 en ventas' },
+  { slug:'pan-de-ajo', name:'Pan De Ajo', tagline:'El que nadie se salta', cat:'Entrante', cid:'ywnqgbaewuywdlhcg48w', priceCents:695, url:'https://lapizzanesa.last.shop/es/product/3d679167-ef2c-4b11-89c7-66ced8fb67f9', badge:null },
+  { slug:'pizza-1-carbonara', name:'Carbonara', tagline:'Cremosa, cargada, sin excusas', cat:'Pizza', cid:'swz43h2zdflrkdjwnjez', priceCents:1795, url:'https://lapizzanesa.last.shop/es/product/6a3d2fe9-c62c-44c3-9429-00edc71c6326', badge:null },
+  { slug:'milanesa-napolitana-la-clasica', name:'Milanesa Napolitana', tagline:'La clásica que nunca falla', cat:'Milanesa', cid:'cydl2pbm2sziodkm3pmr', priceCents:2395, url:'https://lapizzanesa.last.shop/es/product/eca84d53-ed98-4599-9ebb-1a76a6ff6afb', badge:null },
+  { slug:'pizza-cheddar-bacon', name:'Cheddar & Bacon', tagline:'Para los que no se complican', cat:'Pizza', cid:'fieb0bmljvtfc4z0n1wz', priceCents:1895, url:'https://lapizzanesa.last.shop/es/product/00bbd674-686b-4497-b824-1f1ec7510460', badge:null },
+  { slug:'pizza-pollo-bbq', name:'Pollo BBQ', tagline:'La que convierte a los indecisos', cat:'Pizza', cid:'ckqtdzef3atdja2fxg7y', priceCents:1795, url:'https://lapizzanesa.last.shop/es/product/80eaf6e4-ce9a-42a7-86de-691f568c35d1', badge:null },
+];
+
+const REVIEWS = [
+  { author:'Maria Jose Pareja', photo:'https://lh3.googleusercontent.com/a/ACg8ocLW2Q3GKXCqIeG9ntspUF9yLurEN9rLfutVmz3XFjILwlxCXQ=s64-c-rp-mo-br100', quote:'La mejor pizza y milanesa de Alcobendas. Artesanal y hecha con cariño. María y Marco, muchas gracias por estar ahí, por vuestra amabilidad y vuestra comida.' },
+  { author:'Rubén Huertas', photo:'https://lh3.googleusercontent.com/a/ACg8ocJwib8QgX7K4iWX7Y9zAtXOnzXVpzQIzGFgtjZGQAjJJnhm0A=s64-c-rp-mo-br100', quote:'Las pizzas, deliciosas y petadísimas de ingredientes. Hechas al momento y con un precio razonable. También tienen milanesas y repetiremos.' },
+  { author:'Aldana Tudisca', photo:'https://lh3.googleusercontent.com/a/ACg8ocL6ynZPFk5KOV8DmK_yttE2bxy88rbfwJZ8DG3N5ooatg3r7g=s64-c-rp-mo-br100', quote:'La comida es riquísima, todo casero y lo hacen en el momento. Tienen que probarlo.' },
+  { author:'Javier Alvarez', photo:'https://lh3.googleusercontent.com/a-/ALV-UjXI_WrEbursrH_XVHCXvHIT5xBfgUV-V2KZev5qlNmNCDYq_P4q=s64-c-rp-mo-ba4-br100', quote:'La primera vez que veo una pizza tan cargada de ingredientes, y tan frescos y buenos. Sorprendido, con ganas de probar más.' },
+  { author:'Víctor Guío', photo:'https://lh3.googleusercontent.com/a-/ALV-UjXj8NMgJHICiatmwOAuoPT-V8axs_BR-pJ5KokHUVl_sUBuraL2=s64-c-rp-mo-ba2-br100', quote:'Unas pizzas enormes y con muy buen sabor. También hay milanesas, alitas, etc. ¡Está genial!' },
+  { author:'Gabriel Moreno Fernández', photo:'https://lh3.googleusercontent.com/a/ACg8ocKr3EbPBBg1hQr61TOfLHSERy8hIjMLb2LUG-nCwVbeLsWdHQ=s64-c-rp-mo-br100', quote:'Buena pizza, mejor servicio y, lo que es mejor… ¡variedad de cervezas!' },
+];
+
+const ENTRANTES = [
+  { slug:'pan-de-ajo', name:'Pan De Ajo', desc:'Rollitos de masa casera, rellenos de Mozzarella y mantequilla de ajo (Peq. 4U / Gde. 6U)', cid:'ywnqgbaewuywdlhcg48w', priceCents:695, url:'https://lapizzanesa.last.shop/es/product/3d679167-ef2c-4b11-89c7-66ced8fb67f9' },
+  { slug:'patatas-fritas-cheddar-bacon', name:'Patatas Fritas Cheddar Bacon', desc:'Patatas con Salsa Cheddar y Crispy Bacon (250g. / 400g.)', cid:'jafljjlnldb9chvsq6r9', priceCents:795, url:'https://lapizzanesa.last.shop/es/product/65ba3f06-6d56-46fd-a47e-547451e0aee1' },
+  { slug:'provoleta-napolitana', name:'Provoleta Napolitana', desc:'Provolone Fundido con Salsa de Tomate y Grissinis Artesanales', cid:'xltttlylqtd8li1phogr', priceCents:1095, url:'https://lapizzanesa.last.shop/es/product/da44889c-2546-4fe0-aa36-1bc6fc61d4ea' },
+  { slug:'fingers-de-pollo-crispy', name:'Fingers De Pollo Crispy', desc:'Pechugas rebozadas con Harina Crujiente de Garbanzo (200g. / 350g.)', cid:'kjqrn7b7ado07pthihgq', priceCents:695, url:'https://lapizzanesa.last.shop/es/product/9406b527-7a99-4796-a8f4-c5f1ce7f2cf9' },
+  { slug:'aros-de-cebolla', name:'Aros de Cebolla', desc:'Crujientes Aros de Cebolla Rebosados (200g. / 350g.)', cid:'lpymp03ij7gpjmjuko68', priceCents:495, url:'https://lapizzanesa.last.shop/es/product/8000884d-b9ba-489c-9e82-9258898cd823' },
+  { slug:'vegetales-al-horno', name:'Vegetales Al Horno', desc:'Calabacín, Berenjena, Tomate, Cebolla, Pimiento y Champis Asados', cid:'hyaigmkbidyrw7zm2mxu', priceCents:1095, url:'https://lapizzanesa.last.shop/es/product/f94e85ac-f379-484f-8b9e-96515736ffe2' },
+  { slug:'patatas-fritas', name:'Patatas Fritas', desc:'Patatas Fritas estilo Dippers (150g. / 250g.)', cid:'ccmdsqcalgchhbe2bptb', priceCents:395, url:'https://lapizzanesa.last.shop/es/product/d9478f49-b361-4977-b0c1-de3793714225' },
+  { slug:'jalapeno-chili-poppers', name:'Jalapeño Chili Poppers', desc:'Chiles Jalapeños Empanados, Rellenos de Queso Cheddar (Peq. 7U / Gde. 9U)', cid:null, priceCents:795, url:'https://lapizzanesa.last.shop/es/product/7b9e7c39-54e5-48e0-bfb5-7a4bacdcdfb1' },
+  { slug:'alitas-pollo-enteras', name:'Alitas Pollo Enteras', desc:'Alitas Fritas con Especial Receta Casera (Peq. 3U / Gde. 5U)', cid:null, priceCents:695, url:'https://lapizzanesa.last.shop/es/product/ad458582-0e15-4dc7-8b5c-c48df2e2adab' },
+  { slug:'patatas-fritas-supreme', name:'Patatas Fritas Supreme', desc:'Patatas, Doble Salsa Ranch, Carne Picada, Cheddar Fundido, Mozzarella Gratinada', cid:null, priceCents:995, url:'https://lapizzanesa.last.shop/es/product/5504992d-58e0-45fb-b2b0-3e2fa2ccfe31' },
+  { slug:'sampler-de-entrantes', name:'Sampler de Entrantes', desc:'3 Entrantes: Patatas C&B + Fingers de Pollo + Pan de Ajo', cid:null, priceCents:2095, url:'https://lapizzanesa.last.shop/es/product/c6295ced-ec1e-4948-82d7-193a3c84e52b' },
+];
+
+const MILANESAS = [
+  { slug:'milanesa-cheddar-bacon', name:'Milanesa Cheddar & Bacon', desc:'Filete empanado, Salsa Tomate, Mozzarella, Cheddar, Bacon', cid:'uyu2b9xe8tepni4oesvw', priceCents:2395, url:'https://lapizzanesa.last.shop/es/product/52d2d50e-2c38-49b2-ac4c-dbdb9e73d0cf' },
+  { slug:'milanesa-napolitana-la-clasica', name:'Milanesa Napolitana (La Clásica)', desc:'Filete empanado, Salsa tomate, Mozzarella', cid:'cydl2pbm2sziodkm3pmr', priceCents:2395, url:'https://lapizzanesa.last.shop/es/product/eca84d53-ed98-4599-9ebb-1a76a6ff6afb' },
+  { slug:'milanesa-la-criolla-de-mariajo-y-lolo', name:'Milanesa "La Criolla de Maríajo y Lolo"', desc:'Filete empanado, Salsa Tomate, Mozzarella, 4 Quesos, Cebolla, Pimiento Asado', cid:'axaujiv2dfc0qi1ffkmn', priceCents:2395, url:'https://lapizzanesa.last.shop/es/product/a38055f2-55b5-4203-8364-622257e6ff12' },
+  { slug:'milanesa-a-caballo', name:'Milanesa A Caballo', desc:'Filete empanado, Salsa tomate, Mozzarella, Huevo Frito', cid:'bh2w4nriat8rghvooybm', priceCents:2395, url:'https://lapizzanesa.last.shop/es/product/e6fb5182-4952-4a89-90cc-d4c96657e628' },
+  { slug:'milanesa-fugazzetta', name:'Milanesa Fugazzetta', desc:'Especialidad Argentina. Doble Mozzarella, Cebolla, Aceitunas, Orégano (Sin Salsa)', cid:'s9yifne0kwm78w47zcab', priceCents:2395, url:'https://lapizzanesa.last.shop/es/product/2d438036-1957-48ac-acfe-4f89a7d21fe7' },
+  { slug:'milanesa-pollo-bbq', name:'Milanesa Pollo BBQ', desc:'Filete Empanado, Salsa tomate, Mozzarella, Pollo Asado, Cebolla, Salsa BBQ', cid:'xbduopcezfgaxphrbbqz', priceCents:2395, url:'https://lapizzanesa.last.shop/es/product/90a2a1e8-38dd-4ad1-9bc5-16a46b1b0e67' },
+  { slug:'milanesa-serrana', name:'Milanesa Serrana', desc:'Filete empanado, Salsa tomate, Mozzarella, Jamón Serrano, Rúcula Selvática, Grana Padano', cid:'c8wrlh4tba8bmg19zuh3', priceCents:2395, url:'https://lapizzanesa.last.shop/es/product/c18c1ac0-02a0-4376-8bc0-927a8fd07824' },
+  { slug:'milanesa-del-che', name:'Milanesa del Che', desc:'Filete empanado, Salsa tomate, Mozzarella, Jamón York, Orégano', cid:null, priceCents:2395, url:'https://lapizzanesa.last.shop/es/product/b286e1b4-9638-4618-a4aa-cff0dc2524a6' },
+  { slug:'milanesa-cape', name:'Milanesa Capé', desc:'Filete empanado, Salsa tomate, Mozzarella, Carne de Taco, Maíz', cid:null, priceCents:2395, url:'https://lapizzanesa.last.shop/es/product/d51ae4f8-c794-45e3-b5da-08fc185db065' },
+  { slug:'milanesa-charrua', name:'Milanesa Charrúa', desc:'Filete empanado, Salsa tomate, Mozzarella, Jamón York, Tomate Fresco', cid:null, priceCents:2395, url:'https://lapizzanesa.last.shop/es/product/5f168ffc-668c-4b91-8d5c-42e9c611e38e' },
+  { slug:'milanesa-cuatro-quesos', name:'Milanesa Cuatro Quesos', desc:'Filete Empanado, mezcla casera de 4 quesos (Mozzarella, Edam, Gouda, Queso Azul)', cid:null, priceCents:2395, url:'https://lapizzanesa.last.shop/es/product/2d3c8d07-d88f-4873-bde1-46df2082f3c4' },
+  { slug:'milanesa-picante-santa-diavola', name:'Milanesa Picante Santa Diavola', desc:'Filete empanado, Salsa tomate, Mozzarella, Salame Napolitano, Jalapeño, Aceite Picante', cid:null, priceCents:2395, url:'https://lapizzanesa.last.shop/es/product/369cbb40-33af-4152-b323-9f2b831140de' },
+  { slug:'milanesa-rulo-de-cabra', name:'Milanesa Rulo de Cabra', desc:'Filete empanado, Salsa tomate, Mozzarella, Queso Rulo de Cabra, Cebolla, Topping Cebolla Frita', cid:null, priceCents:2395, url:'https://lapizzanesa.last.shop/es/product/f16074f6-1eb2-4cbe-bca1-9a2c15ec9510' },
+];
+
+const PIZZAS = [
+  { slug:'pizza-la-5-ingredientes-de-miguel', name:'Pizza "La 5 Ingredientes de Miguel"', desc:'Salsa tomate, Mozzarella, Cheddar, Bacon, Pollo Asado, Champis, Jamón York', cid:'eif6omvm1fry87dsjmwz', priceCents:1995, url:'https://lapizzanesa.last.shop/es/product/54b5a09a-1710-410c-ac93-e113146dac0d' },
+  { slug:'pizza-la-cesar-de-javi-y-madina', name:'Pizza "La Cesar de Javi y Madina"', desc:'Salsa Blanca, Mozzarella Fresca, Pollo Asado, Cebolla, Rúcula Selvática, Salsa Ranch', cid:'jmkgy8w4dzyqnfmtqcdd', priceCents:1995, url:'https://lapizzanesa.last.shop/es/product/d7361847-4e85-4975-b243-90f41b682e7b' },
+  { slug:'pizza-1-carbonara', name:'Pizza Carbonara', desc:'Salsa Blanca, Mozzarella, Bacon, Crispy Bacon, Champis', cid:'swz43h2zdflrkdjwnjez', priceCents:1795, url:'https://lapizzanesa.last.shop/es/product/6a3d2fe9-c62c-44c3-9429-00edc71c6326' },
+  { slug:'pizza-cheddar-bacon', name:'Pizza Cheddar & Bacon', desc:'Salsa tomate, Mozzarella, Cheddar, Bacon, Crispy Bacon, Salsa BBQ', cid:'fieb0bmljvtfc4z0n1wz', priceCents:1895, url:'https://lapizzanesa.last.shop/es/product/00bbd674-686b-4497-b824-1f1ec7510460' },
+  { slug:'pizza-cheese-burger', name:'Pizza Cheese Burger', desc:'Salsa tomate, Mozzarella, Cheddar, Bacon, Carne de Ternera, Cebolla, Tomate, Salsa Burger', cid:'epvi0ntjutp2an5tpv4g', priceCents:1895, url:'https://lapizzanesa.last.shop/es/product/89abab03-8e25-43e3-8b66-8f65f3343f35' },
+  { slug:'pizza-constitucion-de-la-casa', name:'Pizza Constitución (de la Casa)', desc:'Salsa tomate, Mozzarella, Mozzarella Fresca y nuestra Salsa de Pesto Casero', cid:'wych13d5qyudijdxhknz', priceCents:1795, url:'https://lapizzanesa.last.shop/es/product/071f22cd-4b9d-4f5f-8c9b-c7d0baedaf9b' },
+  { slug:'pizza-pollo-bbq', name:'Pizza Pollo BBQ', desc:'Salsa tomate, Mozzarella, Pollo Asado, Cebolla, Salsa BBQ', cid:'ckqtdzef3atdja2fxg7y', priceCents:1795, url:'https://lapizzanesa.last.shop/es/product/80eaf6e4-ce9a-42a7-86de-691f568c35d1' },
+  { slug:'pizza-mexicana', name:'Pizza Mexicana', desc:'Salsa blanca, Mozzarella, Carne Picada Ternera, Tomate, Chile Jalapeño', cid:'ff0shxeg2ejndelsjwrl', priceCents:1895, url:'https://lapizzanesa.last.shop/es/product/bbe4c2cc-07f1-45bb-a137-b3a5434a7549' },
+  { slug:'pizza-serrana', name:'Pizza Serrana', desc:'Salsa tomate, Mozzarella, Jamón Serrano, Rúcula Selvática, Queso Grana Padano', cid:'idqumcb7mgxxvgev9k5m', priceCents:1895, url:'https://lapizzanesa.last.shop/es/product/1e78f291-acc1-4d6b-923b-f3b8627466f7' },
+  { slug:'pizza-la-104', name:'Pizza "La 104"', desc:'Salsa blanca, Mozzarella, Queso Brie, Cerdo Asado, Cebolla Pochada, Salsa Pedro Ximénez', cid:'hl55fz4hagxtj3vwsquw', priceCents:1995, url:'https://lapizzanesa.last.shop/es/product/c84a9c44-e390-48f4-b64a-b6ac4d87a917' },
+  { slug:'pizza-marinera', name:'Pizza Marinera', desc:'Salsa tomate, Mozzarella, Atún, Anchoas, Pimiento Asado, Aceitunas', cid:'f3aeo4xiprjjusvxoora', priceCents:1795, url:'https://lapizzanesa.last.shop/es/product/c7ee8c5b-c4e0-4b26-b6b4-a284da126f34' },
+  { slug:'pizza-margarita', name:'Pizza Margarita', desc:'Salsa tomate, Mozzarella, Mozzarella Fresca', cid:'kzvsfn7wujrq70bcuq0v', priceCents:1695, url:'https://lapizzanesa.last.shop/es/product/1a5f1d52-1d21-4887-bc5b-5c1afecdcf65' },
+  { slug:'pizza-pepperoni', name:'Pizza Pepperoni', desc:'Salsa tomate, Mozzarella, Pepperoni', cid:'gpvvsbo9c1wll0bl2pl0', priceCents:1695, url:'https://lapizzanesa.last.shop/es/product/3ed3253f-77ad-46c7-bc3a-50138c41b4eb' },
+  { slug:'pizza-picante-santa-diavola', name:'Pizza Picante Santa Diavola', desc:'Salsa tomate, Mozzarella, Pepperoni, Chile Jalapeño', cid:'bzopszlc7do1vuagdi2k', priceCents:1695, url:'https://lapizzanesa.last.shop/es/product/13064646-0aca-4354-8f4d-0e393be2c50c' },
+  { slug:'pizza-hawaiiana', name:'Pizza Hawaiiana', desc:'Salsa tomate, Mozzarella, Bacon, Piña de Costa Rica', cid:'ph3tzitysi9srilijug9', priceCents:1695, url:'https://lapizzanesa.last.shop/es/product/530f30e2-e8cf-47af-aa13-4f5c9d718d9a' },
+  { slug:'pizza-jamon-york', name:'Pizza Jamón York', desc:'Salsa tomate, Mozzarella, Jamón York', cid:'ydsc8hm9uavkj5y32dgt', priceCents:1695, url:'https://lapizzanesa.last.shop/es/product/a4c8b671-a735-4bac-a1d1-89ba76d2bc45' },
+  { slug:'pizza-cuatro-quesos', name:'Pizza Cuatro Quesos', desc:'Salsa tomate, mezcla casera de 4 quesos (Mozzarella, Edam, Gouda, Queso Azul)', cid:'li82lulcj8xvjk6cjfmb', priceCents:1695, url:'https://lapizzanesa.last.shop/es/product/ff130d49-2450-4b55-946b-001f7d8f5eaa' },
+  { slug:'pizza-de-la-huerta', name:'Pizza De La Huerta', desc:'Vegetariana. Salsa tomate, Mozzarella, Berenjena, Calabacín, Pimiento Asados', cid:'p5wj9iwnhzs5hjoprlk7', priceCents:1895, url:'https://lapizzanesa.last.shop/es/product/aae0b564-43fe-4ebc-a052-050f7108f7c6' },
+  { slug:'pizza-bacon-cebolla', name:'Pizza Bacon & Cebolla', desc:'Salsa tomate, Mozzarella, Bacon, Cebolla', cid:'azmrne7rhqw5abvpgsnp', priceCents:1695, url:'https://lapizzanesa.last.shop/es/product/ff9a63f7-af4a-49bb-80d0-a14b66e49ada' },
+  { slug:'pizza-suprema', name:'Pizza Suprema', desc:'Salsa tomate, Mozzarella, Bacon, Pepperoni, Carne Picada, Cebolla, Tomate, Pimiento Verde', cid:null, priceCents:1995, url:'https://lapizzanesa.last.shop/es/product/1540ffba-7c00-40fc-818f-135a06f85b69' },
+  { slug:'pizza-cabra', name:'Pizza Cabra', desc:'Salsa tomate, Mozzarella, Queso Rulo de Cabra, Cebolla, Topping Cebolla Frita', cid:null, priceCents:1795, url:'https://lapizzanesa.last.shop/es/product/94290439-6224-487a-86dc-a2f93337b7e1' },
+  { slug:'pizza-fugazzetta', name:'Pizza Fugazzetta', desc:'Especialidad Argentina. Doble Mozzarella, Cebolla, Aceitunas, Orégano', cid:null, priceCents:1895, url:'https://lapizzanesa.last.shop/es/product/f28c0cf0-12f9-4091-b889-60ef73d29d28' },
+  { slug:'pizza-guanciale-brie', name:'Pizza Guanciale & Brie', desc:'Salsa tomate, Mozzarella, Queso Brie, Guanciale', cid:null, priceCents:1895, url:'https://lapizzanesa.last.shop/es/product/cbfd93fd-af46-43c4-bd4d-4474a17f32e4' },
+];
+
+const POSTRES = [
+  { slug:'alfajor-de-dulce-de-leche', name:'Alfajor de Dulce de Leche', desc:'Dos suaves galletas unidas con dulce de leche, recubiertas de chocolate negro/blanco', cid:'cpatsz9hzbqfrrkqcpzo', priceCents:280, url:'https://lapizzanesa.last.shop/es/product/e6b4ee35-af78-46e1-b670-fb9955ba363b', avail:false },
+  { slug:'crumble-frutos-rojos-con-helado', name:'Crumble Frutos Rojos con Helado', desc:'Galleta Crujiente, Frutos Rojos y una Bola de Helado', cid:'fwxgkqv7kt5nffnwfkxk', priceCents:595, url:'https://lapizzanesa.last.shop/es/product/f9237ccf-1092-410c-9455-64756b92776b', avail:false },
+  { slug:'crumble-manzana-con-helado', name:'Crumble Manzana con Helado', desc:'Galleta Crujiente, Manzana Asada y una Bola de Helado', cid:'zng8dty0cmanxzgh6yt3', priceCents:595, url:'https://lapizzanesa.last.shop/es/product/a17d4b94-c73b-46ce-89d6-0ee330b44885', avail:false },
+  { slug:'tarta-muerte-por-chocolate', name:'Tarta Muerte por Chocolate', desc:'Tres capas de bizcocho húmedo de cacao, rellenas con ganache cremosa, virutas de chocolate', cid:'xewzvrzdbzfphb3zixj1', priceCents:895, url:'https://lapizzanesa.last.shop/es/product/d9bee4f5-b066-4953-a16c-a638a3620951', avail:false },
+  { slug:'tarta-tiramisu', name:'Tarta Tiramisú', desc:'Bizcochos de soletilla con café espresso intenso y crema aterciopelada de mascarpone', cid:'lt9khsscetm00rzajz9n', priceCents:695, url:'https://lapizzanesa.last.shop/es/product/6f41e280-20fc-40e0-8169-614889f0cf87', avail:false },
+  { slug:'tarta-zanahoria', name:'Tarta Zanahoria', desc:'Bizcocho húmedo de zanahoria con crema de queso y un toque cítrico', cid:'vvosqgouvtrm6voflawr', priceCents:795, url:'https://lapizzanesa.last.shop/es/product/fc63fef5-07a6-4ca6-802c-f1efd83fda69', avail:false },
+  { slug:'cookie-con-chispas-de-chocolate', name:'Cookie Chispas de Chocolate', desc:'', cid:'difync3001qnttuwtyzd', priceCents:195, url:'https://lapizzanesa.last.shop/es/product/e6287ab6-73aa-4ca7-b662-86473f27e935', avail:false },
+  { slug:'freaking-chocolate-brownie-con-helado', name:'Brownie Chocolate con Helado', desc:'Brownie de Chocolate con Nueces, Sirope de Chocolate y Bola de Helado', cid:null, priceCents:695, url:'https://lapizzanesa.last.shop/es/product/95402d91-4492-4577-a543-3acfe90ff2a2', avail:false },
+  { slug:'bola-helado', name:'Bola Helado', desc:'', cid:null, priceCents:95, url:'https://lapizzanesa.last.shop/es/product/f7c5174e-4fa5-429e-8c9a-3cdf7bc53fd0', avail:true },
+  { slug:'magnum-almendra', name:'Magnum Almendra', desc:'', cid:null, priceCents:295, url:'https://lapizzanesa.last.shop/es/product/5ef5fb5a-914d-4311-874d-b6f7aec94cf9', avail:false },
+  { slug:'corneto', name:'Corneto', desc:'', cid:null, priceCents:195, url:'https://lapizzanesa.last.shop/es/product/dcc69f2b-7d33-4df1-8135-ae84a962f7b8', avail:false },
+  { slug:'snickers', name:'Snickers', desc:'', cid:null, priceCents:295, url:'https://lapizzanesa.last.shop/es/product/c1f9ad6f-24e9-4198-94d4-8b335e9819c4', avail:false },
+];
+
+// ════════════════════════════════════════════════════════
+// RENDER ENGINE
+// ════════════════════════════════════════════════════════
+
+let CLOUD = '';
+
+function imgUrl(cid, slug, w) {
+  w = w || 400;
+  if (cid && CLOUD) return 'https://res.cloudinary.com/' + CLOUD + '/image/upload/f_auto,q_auto,c_fill,w_' + w + '/' + cid;
+  if (LOCAL_PHOTOS[slug]) return LOCAL_PHOTOS[slug];
+  return null;
+}
+
+function fmt(cents) {
+  return (cents / 100).toFixed(2).replace('.', ',') + ' €';
+}
+
+function esc(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function renderCard(p, catLabel, isTv) {
+  const cid = p.cid || p.cloudinaryId || null;
+  const src = imgUrl(cid, p.slug);
+  const photoHtml = src
+    ? '<img class="card-img" src="' + esc(src) + '" alt="' + esc(p.name) + '" loading="lazy" data-cid="' + esc(cid||'') + '" data-slug="' + esc(p.slug) + '">'
+    : '<div class="card-ph" data-cid="' + esc(cid||'') + '" data-slug="' + esc(p.slug) + '">🍕</div>';
+  const badge = p.badge ? '<span class="badge-top">' + esc(p.badge) + '</span>' : '';
+  const agotado = (p.avail === false) ? '<span class="badge-agotado">Agotado</span>' : '';
+  const desc = p.tagline || p.desc || p.description || '';
+  const link = p.url || p.lastShopUrl || '';
+  const pedirHtml = link ? '<a href="' + esc(link) + '" target="_blank" rel="noopener" class="pedir-btn">Pedir →</a>' : '';
+  return '<article class="card">' +
+    '<div class="card-img-wrap">' + photoHtml + badge + agotado + '</div>' +
+    '<div class="card-body">' +
+      '<div class="card-cat">' + esc(catLabel) + '</div>' +
+      '<h3 class="card-name">' + esc(p.name) + '</h3>' +
+      (desc ? '<p class="card-desc">' + esc(desc) + '</p>' : '') +
+      '<div class="card-footer"><span class="price">' + fmt(p.priceCents) + '</span>' + pedirHtml + '</div>' +
+    '</div>' +
+  '</article>';
+}
+
+function boot() {
+  // Top Ventas grid
+  document.getElementById('tv-grid').innerHTML =
+    TOP_VENTAS.map(p => renderCard(p, p.cat, true)).join('');
+
+  // Reviews
+  document.getElementById('reviews-row').innerHTML = REVIEWS.map(r =>
+    '<figure class="review-card">' +
+      '<div class="review-stars" aria-label="5 estrellas">★★★★★</div>' +
+      '<blockquote class="review-quote">“' + esc(r.quote) + '”</blockquote>' +
+      '<figcaption class="review-author">' +
+        '<img src="' + esc(r.photo) + '" alt="" class="review-photo" referrerpolicy="no-referrer" loading="lazy">' +
+        '<span class="review-name">' + esc(r.author) + '</span>' +
+      '</figcaption>' +
+    '</figure>'
+  ).join('');
+
+  // Carta carousels
+  document.getElementById('car-entrantes').innerHTML = ENTRANTES.map(p => renderCard(p, 'Entrante')).join('');
+  document.getElementById('car-milanesas').innerHTML = MILANESAS.map(p => renderCard(p, 'Milanesa')).join('');
+  document.getElementById('car-pizzas').innerHTML = PIZZAS.map(p => renderCard(p, 'Pizza')).join('');
+  document.getElementById('car-postres').innerHTML = POSTRES.map(p => renderCard(p, 'Postre')).join('');
+}
+
+// ════════════════════════════════════════════════════════
+// CLOUD NAME — update all product images live
+// ════════════════════════════════════════════════════════
+
+function setCloud(val) {
+  CLOUD = val.trim();
+  document.querySelectorAll('[data-cid]').forEach(function(el) {
+    var cid = el.dataset.cid;
+    var slug = el.dataset.slug;
+    if (!cid) return;
+    var url = CLOUD
+      ? 'https://res.cloudinary.com/' + CLOUD + '/image/upload/f_auto,q_auto,c_fill,w_400/' + cid
+      : null;
+    if (el.tagName === 'IMG') {
+      if (url) { el.src = url; }
+    } else {
+      // placeholder → swap to img
+      if (url) {
+        var img = document.createElement('img');
+        img.className = 'card-img';
+        img.src = url;
+        img.alt = '';
+        img.loading = 'lazy';
+        img.dataset.cid = cid;
+        img.dataset.slug = slug;
+        el.parentNode.replaceChild(img, el);
+      }
+    }
+  });
+}
+
+// ════════════════════════════════════════════════════════
+// SKIN SWITCHER
+// ════════════════════════════════════════════════════════
+
+function setSkin(skin) {
+  document.body.className = skin;
+  var skins = ['', 'retro', 'kids'];
+  document.querySelectorAll('.skin-btn').forEach(function(b, i) {
+    b.classList.toggle('active', skins[i] === skin);
+  });
+}
+
+// ════════════════════════════════════════════════════════
+// INTERSECTIONOBSERVER — cat nav active state
+// ════════════════════════════════════════════════════════
+
+function setupObservers() {
+  var catIds = ['entrantes', 'milanesas', 'pizzas', 'postres'];
+  var catLinks = {};
+  document.querySelectorAll('.cat-a').forEach(function(a) {
+    var id = a.getAttribute('href').replace('#', '');
+    catLinks[id] = a;
+  });
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(e) {
+      if (e.isIntersecting) {
+        Object.values(catLinks).forEach(function(a) { a.classList.remove('active'); });
+        if (catLinks[e.target.id]) catLinks[e.target.id].classList.add('active');
+      }
+    });
+  }, { rootMargin: '-56px 0px -55% 0px', threshold: 0 });
+  catIds.forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el) observer.observe(el);
+  });
+}
+
+// ════════════════════════════════════════════════════════
+// INIT
+// ════════════════════════════════════════════════════════
+
+boot();
+setupObservers();
+</script>
+</body>
+</html>
