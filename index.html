@@ -263,11 +263,11 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:48px 20p
 <!-- ═══ TRUST BAR ═══ -->
 <div class="trust-bar">
   <ul class="trust-list" role="list">
-    <li class="trust-item">🫓 Masa 72h</li>
-    <li class="trust-item">📏 Mediana 33 cm</li>
-    <li class="trust-item">📍 Alcobendas · Tu barrio</li>
-    <li class="trust-item">✅ Garantía Operativa</li>
-    <li class="trust-item">🤌 Artesanal cada día</li>
+    <li class="trust-item">Masa 72h</li>
+    <li class="trust-item">Mediana 33 cm</li>
+    <li class="trust-item">Alcobendas · Tu barrio</li>
+    <li class="trust-item">Garantía Operativa</li>
+    <li class="trust-item">Artesanal cada día</li>
   </ul>
 </div>
 
@@ -563,7 +563,7 @@ function renderCard(p, catLabel, isTv) {
   const src = imgUrl(cid, p.slug);
   const photoHtml = src
     ? '<img class="card-img" src="' + esc(src) + '" alt="' + esc(p.name) + '" loading="lazy" data-cid="' + esc(cid||'') + '" data-slug="' + esc(p.slug) + '">'
-    : '<div class="card-ph" data-cid="' + esc(cid||'') + '" data-slug="' + esc(p.slug) + '">🍕</div>';
+    : '<div class="card-ph" data-cid="' + esc(cid||'') + '" data-slug="' + esc(p.slug) + '"></div>';
   const badge = p.badge ? '<span class="badge-top">' + esc(p.badge) + '</span>' : '';
   const agotado = (p.avail === false) ? '<span class="badge-agotado">Agotado</span>' : '';
   const desc = p.tagline || p.desc || p.description || '';
