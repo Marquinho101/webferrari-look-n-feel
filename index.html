@@ -12,7 +12,7 @@ html{scroll-behavior:smooth;scroll-padding-top:112px}
 :root{
   --bg:#0d0d0d;--bg2:#111;--surface:#181818;
   --border:rgba(245,230,200,.12);--border-h:rgba(192,57,43,.45);
-  --text:#f5e6c8;--muted:rgba(245,230,200,.55);
+  --text:#f5e6c8;--muted:rgba(245,230,200,.65);
   --accent:#c0392b;--gold:#d4a017;
   --r:14px;--r-sm:8px;
   --font:system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
@@ -93,7 +93,7 @@ button{font-family:var(--font);cursor:pointer;border:none;outline:none}
 
 /* ══ HERO ══ */
 .hero{position:relative;overflow:hidden;background:var(--bg);min-height:500px;display:flex;align-items:center}
-.hero-bg{position:absolute;inset:-15%;width:130%;height:130%;object-fit:cover;object-position:center 60%;transform:rotate(-11deg) scale(1.1);transform-origin:center 70%;opacity:.72;filter:contrast(1.55) brightness(.72) saturate(1.25)}
+.hero-bg{position:absolute;inset:-15%;width:130%;height:130%;object-fit:cover;object-position:center 60%;transform:rotate(-11deg) scale(1.1);transform-origin:center 70%;opacity:.53;filter:contrast(1.55) brightness(.72) saturate(1.25)}
 .hero-overlay{position:absolute;inset:0;background:
   radial-gradient(ellipse 55% 38% at 78% -8%,rgba(255,185,55,.58) 0%,rgba(255,110,0,.18) 45%,transparent 65%),
   linear-gradient(to bottom,rgba(0,0,10,.94) 0%,rgba(0,0,8,.55) 30%,rgba(0,0,4,.2) 55%,transparent 72%),
@@ -217,6 +217,18 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:48px 20p
 /* ══ UTIL ══ */
 .swipe{font-size:11px;color:var(--muted);margin-top:8px}
 @media(min-width:640px){.swipe{display:none}}
+
+/* ══ FLASH BANNER ══ */
+.flash-banner{width:100%;background:#FF00FF;color:#000;text-align:center;font-weight:900;text-transform:uppercase;padding:10px 16px;font-size:13px;letter-spacing:.03em}
+@media(min-width:640px){.flash-banner{font-size:18px;letter-spacing:.1em;padding:16px}}
+
+/* ══ LOGOS BAR ══ */
+.logos-bar{background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:24px 20px}
+.logos-inner{max-width:960px;margin:0 auto;display:flex;flex-direction:column;align-items:center;gap:16px}
+.logos-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--muted)}
+.logos-list{display:flex;flex-wrap:wrap;gap:24px;align-items:center;justify-content:center}
+.logos-list img{height:32px;width:auto;object-fit:contain;opacity:.65;filter:grayscale(1) brightness(3);transition:opacity .15s,filter .15s}
+.logos-list img:hover{opacity:1;filter:grayscale(0) brightness(1)}
 </style>
 </head>
 <body>
@@ -230,8 +242,13 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:48px 20p
   </div>
   <div class="cloud-wrap">
     <label for="cloudIn">☁ cloud:</label>
-    <input id="cloudIn" class="cloud-in" type="text" placeholder="tu-cloud-name" oninput="setCloud(this.value)">
+    <input id="cloudIn" class="cloud-in" type="text" value="lastpos" placeholder="cloud-name" oninput="setCloud(this.value)">
   </div>
+</div>
+
+<!-- ═══ FLASH BANNER ═══ -->
+<div class="flash-banner">
+  🔥&nbsp;Solo HOY · Milas -30% — solo hasta medianoche&nbsp;🔥
 </div>
 
 <!-- ═══ MAIN NAV ═══ -->
@@ -271,6 +288,21 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:48px 20p
     <li class="trust-item">Garantía Operativa</li>
     <li class="trust-item">Artesanal cada día</li>
   </ul>
+</div>
+
+<!-- ═══ LOGOS BAR ═══ -->
+<div class="logos-bar">
+  <div class="logos-inner">
+    <span class="logos-label">Con los mejores ingredientes</span>
+    <div class="logos-list">
+      <img src="https://webferrari.lapizzanesa.pizza/logos/mutti.png" alt="Mutti">
+      <img src="https://webferrari.lapizzanesa.pizza/logos/caputo.png" alt="Caputo">
+      <img src="https://webferrari.lapizzanesa.pizza/logos/albe.png" alt="Albe">
+      <img src="https://webferrari.lapizzanesa.pizza/logos/coca-cola.svg" alt="Coca-Cola">
+      <img src="https://webferrari.lapizzanesa.pizza/logos/fanta.svg" alt="Fanta">
+      <img src="https://webferrari.lapizzanesa.pizza/logos/mahou.svg" alt="Mahou">
+    </div>
+  </div>
 </div>
 
 <!-- ═══ PROMOS ═══ -->
@@ -545,7 +577,7 @@ const POSTRES = [
 // RENDER ENGINE
 // ════════════════════════════════════════════════════════
 
-let CLOUD = '';
+let CLOUD = 'lastpos';
 
 function imgUrl(cid, slug, w) {
   w = w || 400;
@@ -572,7 +604,7 @@ function renderCard(p, catLabel, isTv) {
   const agotado = (p.avail === false) ? '<span class="badge-agotado">Agotado</span>' : '';
   const desc = p.tagline || p.desc || p.description || '';
   const link = p.url || p.lastShopUrl || '';
-  const pedirHtml = link ? '<a href="' + esc(link) + '" target="_blank" rel="noopener" class="pedir-btn">Pedir →</a>' : '';
+  const pedirHtml = link ? '<a href="' + esc(link) + '" target="_blank" rel="noopener" class="pedir-btn">Pedir</a>' : '';
   return '<article class="card">' +
     '<div class="card-img-wrap">' + photoHtml + badge + agotado + '</div>' +
     '<div class="card-body">' +
