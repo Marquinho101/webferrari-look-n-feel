@@ -20,6 +20,93 @@ html{scroll-behavior:smooth;scroll-padding-top:112px}
   --shadow:0 2px 12px rgba(0,0,0,.4);--shadow-h:0 8px 28px rgba(0,0,0,.7);
 }
 
+/* ══ SKIN: TEX-MEX / OLD WEST (Taberna y Recompensas) ══ */
+body.texmex {
+  --bg: #c2a878; /* Arena del desierto */
+  --bg2: #4a3018; /* Madera oscura de taberna */
+  --surface: #e8d8b7; /* Papel pergamino sucio */
+  --border: #754c24; /* Madera de letrero */
+  --border-h: #8b0000; /* Rojo sangre seca */
+  --text: #2c1a0e; /* Tinta oscura */
+  --muted: #5c4326;
+  --accent: #8b0000; /* Rojo wanted */
+  --gold: #d4af37; /* Oro puro */
+  --r: 2px; /* Bordes ásperos y rectos */
+  --r-sm: 2px;
+  --font: "Georgia", "Times New Roman", serif; /* Tipografía antigua */
+  --hfont: "Courier New", Courier, monospace;
+  --nav-bg: rgba(74, 48, 24, 0.95);
+  
+  background-color: var(--bg);
+  color: var(--text);
+  
+  /* Desierto, calaveras, cactus, minas y carteles */
+  background-image: 
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='800' opacity='0.12'%3E%3Ctext x='50' y='180' font-size='100'%3E%F0%9F%8C%B5%3C/text%3E%3Ctext x='450' y='350' font-size='120'%3E%E2%98%A0%EF%B8%8F%3C/text%3E%3Ctext x='600' y='150' font-size='90'%3E%E2%9B%8F%EF%B8%8F%3C/text%3E%3Ctext x='150' y='600' font-size='110'%3E%F0%9F%92%B0%3C/text%3E%3Ctext x='500' y='700' font-size='100'%3E%F0%9F%93%9C%3C/text%3E%3Ctext x='300' y='800' font-size='90'%3E%F0%9F%90%82%3C/text%3E%3C/svg%3E"),
+    radial-gradient(circle at center, transparent 0%, rgba(60, 30, 10, 0.6) 100%);
+  background-size: 800px 800px, 100% 100%;
+  background-attachment: fixed;
+}
+body.texmex h1, body.texmex h2, body.texmex h3, body.texmex h4 {
+  text-transform: uppercase;
+  font-weight: 900;
+  letter-spacing: 2px;
+}
+body.texmex .hero-h1 {
+  color: #3e2723;
+  text-shadow: 3px 3px 0px #d4af37, -1px -1px 0px #fff;
+}
+body.texmex .hero-eyebrow {
+  color: #8b0000;
+  font-weight: 900;
+  letter-spacing: 4px;
+}
+/* Estilo "WANTED Poster" para las tarjetas */
+body.texmex .card, body.texmex .combo-card, body.texmex .promo-card, body.texmex .review-card {
+  background: var(--surface);
+  border: 4px solid var(--border);
+  box-shadow: 5px 5px 15px rgba(0,0,0,0.6), inset 0 0 30px rgba(139,69,19,0.25);
+  transition: all 0.2s ease;
+}
+body.texmex .card:hover, body.texmex .combo-card:hover {
+  border-color: var(--accent);
+  transform: rotate(-1.5deg) scale(1.02); /* Parecen colgados mal en la pared */
+  box-shadow: 8px 8px 20px rgba(0,0,0,0.7), inset 0 0 40px rgba(139,69,19,0.4);
+}
+/* Fotos con filtro sepia de cámara antigua */
+body.texmex .card-img-wrap {
+  border-bottom: 4px solid var(--border);
+  filter: sepia(0.7) contrast(1.3) brightness(0.9); 
+}
+/* Botones estilo letreros de madera cortados */
+body.texmex .btn-primary, body.texmex .combo-cta, body.texmex .pedir-btn {
+  background: var(--bg2) !important;
+  color: #e8d8b7 !important;
+  border: 2px solid #2c1a0e;
+  border-radius: 2px;
+  text-transform: uppercase;
+  font-weight: 900;
+  box-shadow: 4px 4px 0px #2c1a0e;
+  transition: all 0.1s;
+}
+body.texmex .pedir-btn { padding: 6px 14px; }
+body.texmex .btn-primary:hover, body.texmex .combo-cta:hover, body.texmex .pedir-btn:hover {
+  background: #8b0000 !important;
+  transform: translateY(4px) translateX(4px);
+  box-shadow: 0px 0px 0px #2c1a0e;
+  text-decoration: none;
+}
+body.texmex .price { color: #8b0000; font-size: 1.2rem; font-weight: 900; }
+body.texmex .cat-a.active {
+  background: var(--bg2); color: var(--gold); border: 1px solid var(--gold);
+}
+body.texmex .main-nav { border-bottom: 4px solid var(--gold); }
+body.texmex .nav-a { color: #e8d8b7; }
+body.texmex .nav-a:hover { color: var(--gold); background: rgba(0,0,0,0.2); }
+body.texmex .nav-cta { background: var(--gold); color: #2c1a0e; box-shadow: 2px 2px 0 #2c1a0e; }
+body.texmex .trust-bar { background: var(--bg2); border-bottom: 2px solid var(--gold); }
+body.texmex .trust-item { color: #e8d8b7; border-color: var(--gold); }
+
 /* ══ SKIN: PREMIUM (Apple Style) ══ */
 body.premium{
   --bg:#f5f5f7;--bg2:#ffffff;--surface:rgba(255,255,255,0.65);
@@ -93,9 +180,8 @@ body.retro-premium .card, body.retro-premium .combo-card, body.retro-premium .pr
   box-shadow: 0 15px 35px rgba(0,0,0,0.6), inset 0 0 20px rgba(255,0,127,0.05);
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
-/* Modificador de imágenes SUPER GRANDES en productos */
-body.retro-premium .card { flex: 0 0 280px; } /* Tarjetas mucho más anchas */
-body.retro-premium .card-img-wrap { aspect-ratio: 1/1; } /* Imágenes de productos más grandes (cuadradas) */
+body.retro-premium .card { flex: 0 0 280px; } 
+body.retro-premium .card-img-wrap { aspect-ratio: 1/1; }
 body.retro-premium .combo-card { flex: 0 0 320px; }
 
 body.retro-premium .card:hover, body.retro-premium .combo-card:hover {
@@ -330,12 +416,12 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:48px 20p
 </head>
 <body>
 
-<!-- ═══ TOOLBAR ═══ -->
 <div class="toolbar">
   <div class="skin-buttons">
     <button class="skin-btn active" onclick="setSkin('')">Marca</button>
     <button class="skin-btn" onclick="setSkin('premium')">🍏 Premium</button>
     <button class="skin-btn" onclick="setSkin('retro-premium')">🕹️ Arcade 80s</button>
+    <button class="skin-btn" onclick="setSkin('texmex')">🌵 TexMex</button>
     <button class="skin-btn" onclick="setSkin('retro')">Retro 80s</button>
     <button class="skin-btn" onclick="setSkin('kids')">Kids</button>
   </div>
@@ -345,12 +431,10 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:48px 20p
   </div>
 </div>
 
-<!-- ═══ FLASH BANNER ═══ -->
 <div class="flash-banner">
-  🔥&nbsp;Solo HOY · Milas -30% — solo hasta medianoche&nbsp;🔥
+  🔥 Solo HOY · Milas -30% — solo hasta medianoche 🔥
 </div>
 
-<!-- ═══ MAIN NAV ═══ -->
 <nav class="main-nav">
   <a href="#home" class="nav-logo">
     <img src="https://webferrari.lapizzanesa.pizza/logo-wordmark.png" alt="La Pizzanesa">
@@ -363,12 +447,11 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:48px 20p
   </div>
 </nav>
 
-<!-- ═══ HERO ═══ -->
 <section id="home" class="hero">
   <img class="hero-bg" src="https://webferrari.lapizzanesa.pizza/photos/carnivora.webp" alt="" aria-hidden="true">
   <div class="hero-overlay"></div>
   <div class="hero-content">
-    <p class="hero-eyebrow">Alcobendas · Pizzas &amp; Milanesas artesanas</p>
+    <p class="hero-eyebrow">Alcobendas · Pizzas & Milanesas artesanas</p>
     <h1 class="hero-h1">Milanesas gigantes.<br>Masa 72h.<br>Pide en 2 clics.</h1>
     <p class="hero-sub">Pizza artesana de Alcobendas, hecha con mimo cada día. Sin plataformas de por medio — directamente de nuestro horno a tu mesa.</p>
     <div class="hero-ctas">
@@ -378,7 +461,6 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:48px 20p
   </div>
 </section>
 
-<!-- ═══ TRUST BAR ═══ -->
 <div class="trust-bar">
   <ul class="trust-list" role="list">
     <li class="trust-item">Masa 72h</li>
@@ -389,7 +471,6 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:48px 20p
   </ul>
 </div>
 
-<!-- ═══ LOGOS BAR ═══ -->
 <div class="logos-bar">
   <div class="logos-inner">
     <span class="logos-label">Con los mejores ingredientes</span>
@@ -404,7 +485,6 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:48px 20p
   </div>
 </div>
 
-<!-- ═══ PROMOS ═══ -->
 <div class="promos-bg">
   <div class="section">
     <h2 class="section-h2">Ofertas semanales</h2>
@@ -428,7 +508,6 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:48px 20p
   </div>
 </div>
 
-<!-- ═══ COMBOS ═══ -->
 <div class="section" style="padding-top:48px">
   <h2 class="section-h2">Menús y combos</h2>
   <p class="section-sub">Decisión fácil. Precio claro. Sin sustos.</p>
@@ -453,7 +532,6 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:48px 20p
   <p class="swipe">← desliza →</p>
 </div>
 
-<!-- ═══ TOP VENTAS ═══ -->
 <div id="top-ventas" class="tv-bg">
   <div class="section">
     <h2 class="section-h2">Lo que más se pide</h2>
@@ -462,7 +540,6 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:48px 20p
   </div>
 </div>
 
-<!-- ═══ REVIEWS ═══ -->
 <div id="reviews" class="reviews-bg">
   <div class="section">
     <h2 class="section-h2">Lo que dicen nuestros clientes</h2>
@@ -475,20 +552,17 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:48px 20p
   </div>
 </div>
 
-<!-- ═══ HISTORIA ═══ -->
 <div id="historia" class="section">
   <h2 class="section-h2">Nuestra historia</h2>
   <p class="historia-text">La Pizzanesa nació en Alcobendas con una idea simple: milanesas gigantes estilo argentino y pizzas de verdad, artesanas, hechas con mimo cada día. Sin atajos.</p>
   <p class="historia-text">El barrio le puso nombre a las pizzas. Los Parroquiers, el grupo de WhatsApp, los pedidos de oficina en grupo: La Pizzanesa es el tercer lugar del barrio, en digital. No un local bonito — una comunidad que comparte pizza.</p>
 </div>
 
-<!-- ═══ CARTA DIVIDER ═══ -->
 <div id="carta" class="carta-div">
   <h2 class="carta-div-title">La Carta</h2>
   <p class="carta-div-sub">28 pizzas · 13 milanesas · 11 entrantes · postres</p>
 </div>
 
-<!-- ═══ CAT NAV ═══ -->
 <nav class="cat-nav" id="cat-nav" aria-label="Categorías">
   <a href="#entrantes" class="cat-a">Entrantes</a>
   <a href="#milanesas" class="cat-a">Milanesas</a>
@@ -496,7 +570,6 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:48px 20p
   <a href="#postres" class="cat-a">Postres</a>
 </nav>
 
-<!-- ENTRANTES -->
 <section id="entrantes" class="cat-section">
   <div class="cat-inner">
     <h2 class="cat-h2">Entrantes</h2>
@@ -506,7 +579,6 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:48px 20p
   </div>
 </section>
 
-<!-- MILANESAS -->
 <section id="milanesas" class="cat-section">
   <div class="cat-inner">
     <h2 class="cat-h2">Milanesas</h2>
@@ -516,7 +588,6 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:48px 20p
   </div>
 </section>
 
-<!-- PIZZAS -->
 <section id="pizzas" class="cat-section">
   <div class="cat-inner">
     <h2 class="cat-h2">Pizzas</h2>
@@ -526,7 +597,6 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:48px 20p
   </div>
 </section>
 
-<!-- POSTRES -->
 <section id="postres" class="cat-section">
   <div class="cat-inner">
     <h2 class="cat-h2">Postres</h2>
@@ -536,7 +606,6 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:48px 20p
   </div>
 </section>
 
-<!-- ═══ FOOTER ═══ -->
 <footer>
   <div class="footer-grid">
     <div>
@@ -690,7 +759,7 @@ function fmt(cents) {
 }
 
 function esc(s) {
-  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  return String(s).replace(/&/g,'&').replace(/</g,'<').replace(/>/g,'>').replace(/"/g,'"');
 }
 
 function renderCard(p, catLabel, isTv) {
@@ -776,7 +845,7 @@ function setCloud(val) {
 
 function setSkin(skin) {
   document.body.className = skin;
-  var skins = ['', 'premium', 'retro-premium', 'retro', 'kids'];
+  var skins = ['', 'premium', 'retro-premium', 'texmex', 'retro', 'kids'];
   document.querySelectorAll('.skin-btn').forEach(function(b, i) {
     b.classList.toggle('active', skins[i] === skin);
   });
